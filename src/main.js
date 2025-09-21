@@ -1,9 +1,12 @@
 import { fetchImages } from "./js/pixabay-api.js";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const form = document.querySelector(".form");
 const gallery = document.querySelector(".gallery");
+let lightbox; 
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -34,11 +37,11 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
-      const markup = data.hits
+    const markup = data.hits
       .map(
         (hit) => `
         <li class="gallery-item">
-          <a href="${hit.largeImageURL}" target="_blank" rel="noopener noreferrer">
+          <a href="${hit.largeImageURL}">
             <img src="${hit.webformatURL}" alt="${hit.tags}" width="300">
           </a>
           <div class="info">
@@ -53,6 +56,16 @@ form.addEventListener("submit", async (event) => {
       .join("");
 
     gallery.innerHTML = markup;
+
+   
+    if (lightbox) {
+      lightbox.refresh();
+    } else {
+      lightbox = new SimpleLightbox(".gallery a", {
+        captionsData: "alt",
+        captionDelay: 250,
+      });
+    }
   } catch (error) {
     iziToast.error({
       title: "Error",
