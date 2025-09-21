@@ -75,3 +75,27 @@ form.addEventListener("submit", async (event) => {
     console.error(error);
   }
 });
+
+const loader = document.querySelector(".loader");
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const searchQuery = form.elements["search-text"].value.trim();
+  if (!searchQuery) return;
+  loader.classList.remove("loader-hidden");
+
+  try {
+    const data = await fetchImages(searchQuery);
+
+    if (data.hits.length === 0) {
+      gallery.innerHTML = "";
+      iziToast.error({ title: "Error", message: "No images found!" });
+    } else {
+      renderGallery(data.hits, gallery);
+    }
+  } catch (error) {
+    iziToast.error({ title: "Error", message: "Something went wrong!" });
+  } finally {
+    loader.classList.add("loader-hidden");
+  }
+});
