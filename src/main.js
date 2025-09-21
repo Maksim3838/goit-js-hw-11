@@ -1,4 +1,4 @@
-import { fetchImages } from "./pixabay-api.js";
+import { fetchImages } from "./js/pixabay-api.js";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
@@ -10,7 +10,7 @@ form.addEventListener("submit", async (event) => {
 
   const searchQuery = form.elements["search-text"].value.trim();
 
-   if (!searchQuery) {
+    if (!searchQuery) {
     iziToast.warning({
       title: "Warning",
       message: "Please enter a search term!",
@@ -25,17 +25,18 @@ form.addEventListener("submit", async (event) => {
     if (data.hits.length === 0) {
       iziToast.error({
         title: "Error",
-        message: "Sorry, there are no images matching your search query. Please try again!",
+        message:
+          "Sorry, there are no images matching your search query. Please try again!",
         position: "topRight",
       });
       gallery.innerHTML = "";
       return;
     }
 
-      gallery.innerHTML = data.hits
+       gallery.innerHTML = data.hits
       .map(
         (hit) => `
-        <li>
+        <li class="gallery-item">
           <img src="${hit.webformatURL}" alt="${hit.tags}" width="300">
         </li>
       `
