@@ -10,7 +10,7 @@ form.addEventListener("submit", async (event) => {
 
   const searchQuery = form.elements["search-text"].value.trim();
 
-    if (!searchQuery) {
+  if (!searchQuery) {
     iziToast.warning({
       title: "Warning",
       message: "Please enter a search term!",
@@ -18,6 +18,8 @@ form.addEventListener("submit", async (event) => {
     });
     return;
   }
+
+    gallery.innerHTML = "";
 
   try {
     const data = await fetchImages(searchQuery);
@@ -29,19 +31,28 @@ form.addEventListener("submit", async (event) => {
           "Sorry, there are no images matching your search query. Please try again!",
         position: "topRight",
       });
-      gallery.innerHTML = "";
       return;
     }
 
-       gallery.innerHTML = data.hits
+      const markup = data.hits
       .map(
         (hit) => `
         <li class="gallery-item">
-          <img src="${hit.webformatURL}" alt="${hit.tags}" width="300">
+          <a href="${hit.largeImageURL}" target="_blank" rel="noopener noreferrer">
+            <img src="${hit.webformatURL}" alt="${hit.tags}" width="300">
+          </a>
+          <div class="info">
+            <p><b>Likes:</b> ${hit.likes}</p>
+            <p><b>Views:</b> ${hit.views}</p>
+            <p><b>Comments:</b> ${hit.comments}</p>
+            <p><b>Downloads:</b> ${hit.downloads}</p>
+          </div>
         </li>
       `
       )
       .join("");
+
+    gallery.innerHTML = markup;
   } catch (error) {
     iziToast.error({
       title: "Error",
