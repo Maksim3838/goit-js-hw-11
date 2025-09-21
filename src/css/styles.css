@@ -9,17 +9,33 @@
 @import url('./base.css');
 
 .gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
   list-style: none;
   padding: 0;
   margin: 20px 0;
 }
 
-.gallery-item img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+.gallery-item {
+  border: 1px solid #ddd;
   border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.gallery-item img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.info {
+  padding: 10px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
 }
