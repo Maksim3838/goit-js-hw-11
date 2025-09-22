@@ -1,19 +1,32 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-let lightbox; 
+let lightbox;
+const loader = document.querySelector(".loader");
 
-/**
- * @param {Array} images 
- * @param {HTMLElement} gallery 
- */
-export function renderGallery(images, gallery) {
+
+
+export function clearGallery(gallery) {
+  gallery.innerHTML = "";
+}
+
+  
+export function showLoader() {
+  loader.classList.remove("loader-hidden");
+}
+
+
+export function hideLoader() {
+  loader.classList.add("loader-hidden");
+}
+
+ export function renderGallery(images, gallery, replace = true) {
   const markup = images
     .map(
       (hit) => `
       <li class="gallery-item">
         <a href="${hit.largeImageURL}">
-          <img src="${hit.webformatURL}" alt="${hit.tags}" width="300">
+          <img src="${hit.webformatURL}" alt="${hit.tags.replace(/"/g, "&quot;")}" width="300">
         </a>
         <div class="info">
           <p><b>Likes:</b> ${hit.likes}</p>
@@ -26,7 +39,11 @@ export function renderGallery(images, gallery) {
     )
     .join("");
 
-  gallery.innerHTML = markup;
+  if (replace) {
+    gallery.innerHTML = markup;
+  } else {
+    gallery.insertAdjacentHTML("beforeend", markup);
+  }
 
   if (lightbox) {
     lightbox.refresh();
